@@ -1,9 +1,11 @@
 /*User table*/
 
-CREATE TABLE user(firstName VARCHAR(20) NOT NULL, 
+CREATE TABLE user(userId INT NOT NULL AUTO_INCREMENT,
+				  firstName VARCHAR(20) NOT NULL, 
                   lastName  VARCHAR(20) NOT NULL, 
-                  email     VARCHAR(50) NOT NULL, 
-                  password  VARCHAR(1000) NOT NULL);
+                  email     VARCHAR(50) NOT NULL UNIQUE, 
+                  password  VARCHAR(1000) NOT NULL,
+				  PRIMARY KEY(userId));
 
 /*Creating new database user*/
 
