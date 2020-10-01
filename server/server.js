@@ -1,11 +1,10 @@
 const express = require("express");
 const session = require("express-session");
+const MySQLStore = require("express-mysql-session")(session);
 const con = require("./config/db.js");
 const routes = require("./routes/index");
 
 const app = express();
-
-const PORT = process.env.PORT;
 
 app.use(express.json());
 // connecting route to database
@@ -16,12 +15,14 @@ app.use((req, res, next) => {
 
 app.use(
   session({
-    name: "USER_SID",
+    name: process.env.SESSION_COOKIE_NAME,
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
+    rolling: false,
+    store: new MySQLStore({}, con),
     cookie: {
-      maxAge: 1000 * 60 * 60 * 2, // 2 hours
+      maxAge: 1000 * 60 * 60 * 24 * 2, //2 days
       httpOnly: false,
     },
   })
@@ -29,6 +30,6 @@ app.use(
 
 app.use("/api/", routes);
 
-app.listen(PORT, () => {
-  console.log(`Listening at ${PORT}`);
+app.listen(process.env.PORT, () => {
+  console.log(`Listening at ${process.env.PORT}`);
 });
